@@ -6,7 +6,7 @@ if (isset($_GET['post_id'])) {
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("i", $post_id);
     if ($stmt->execute()) {
-        header("Location: ../pages/index.php?message=Post+deleted+successfully");
+        header("Location: ../index.php?message=Post+deleted+successfully");
         exit();
     } else {
         echo "Error deleting post: " . $conn->error;

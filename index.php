@@ -1,8 +1,8 @@
 <?php
-include("../db/get_posts.php");
+include("./db/get_posts.php");
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ./pages/login.php");
     exit;
 }
 ?>
@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Facebook</title>
-    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 
 <body>
@@ -44,7 +44,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- Posts -->
         <div id="postsContainer" class="posts">
             <div class="create-post">
-                <form action="../db/upload_post.php" method="POST" enctype="multipart/form-data">
+                <form action="./db/upload_post.php" method="POST" enctype="multipart/form-data">
                     <textarea name="content" rows="3" placeholder="What's on your mind?"></textarea>
                     <input type="file" name="media" accept="image/*,video/*" style="margin-top: 10px;">
                     <button type="submit" name='btn_upload'>Post</button>
@@ -68,13 +68,13 @@ if (!isset($_SESSION['user_id'])) {
 
                             <!-- Actions -->
                             <div style='display: flex; gap: 15px;'>
-                                <a href='./edit_page.php?post_id=" . $row['id'] . "' 
+                                <a href='./pages/edit_page.php?post_id=" . $row['id'] . "' 
                                    style='color: blue; text-decoration: none; font-weight: bold;'
                                    onclick=\"return confirm('Are you sure you want to edit this post?');\"
                                    >
                                    Edit
                                 </a>
-                                <a href='../db/delete_post.php?post_id=" . $row['id'] . "'   
+                                <a href='./db/delete_post.php?post_id=" . $row['id'] . "'   
                                    style='color: red; text-decoration: none; font-weight: bold;'  
                                    onclick=\"return confirm('Are you sure you want to delete this post?');\">
                                    Delete
@@ -118,7 +118,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- Contacts -->
         <div class="contacts">
             <center style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
-                <img src="../uploads/friends.png"  alt="online friends">
+                <img src="./uploads/friends.png"  alt="online friends">
                 <h3>Online Friends</h3>
             </center>
             <a href="#" class="contact">

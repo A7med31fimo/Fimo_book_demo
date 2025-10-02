@@ -17,7 +17,7 @@ if (isset($_POST['btn_upload'])) {
     $sql = "INSERT INTO posts (user_id, content, media) VALUES ('$user_id', '$content', '$media')";
     if ($connection->query($sql)) {
         // echo "Post Added Successfully ✅";
-        header("Location: ../pages/index.php");
+        header("Location: ../index.php");
         exit();
     } else {
         echo "Error: " . $conn->error;

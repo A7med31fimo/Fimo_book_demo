@@ -97,7 +97,7 @@ $post = $result->fetch_assoc();
                         <?php
                         $ext = strtolower(pathinfo($post['media'], PATHINFO_EXTENSION));
                         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
-                            echo "<img src='" . htmlspecialchars($post['media']) . "' alt='Post Image'>";
+                            echo "<img src='" .".". htmlspecialchars($post['media']) . "' alt='Post Image'>";
                         } elseif (in_array($ext, ['mp4', 'webm'])) {
                             echo "<video controls><source src='" . htmlspecialchars($post['media']) . "'></video>";
                         }
