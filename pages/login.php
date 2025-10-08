@@ -7,22 +7,18 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     $stmt = $connection->prepare("SELECT id, name, password FROM users WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-
+    $stmt->execute([$email]);
+    $result = $stmt->fetchAll();
+    
+    if (count($result) == 1) {
+        $user = $result[0];
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
-            header("Location: ../index.php"); // بعد الدخول يروح للهوم
-            exit;
-        } else {
-            echo "
-            <br>
-            <p style='color:red;'>Invalid password!</p>";
+            header("Location: ../index.php");
+        }else {
+            echo "  <br>
+            <p style='color:red;'>Invalid password or email !</p>";           
         }
     } else {
         echo "

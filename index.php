@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
         </a>
         <input type="text" placeholder="Search...">
         <h1>WELCOME, <?= htmlspecialchars($_SESSION['user_name']) ?> 🎉</h1>
-        <a href="logout.php"  style="text-decoration: none; background-color: #1e4798ff;padding:10px;border-radius:15px; cursor: pointer; color:white;">Logout</a>
+        <a href="./db/logout.php"  style="text-decoration: none; background-color: #1e4798ff;padding:10px;border-radius:15px; cursor: pointer; color:white;">Logout</a>
     </div>
 
     <div class="container">
@@ -52,29 +52,29 @@ if (!isset($_SESSION['user_id'])) {
             </div>
 
             <?php
-            if (isset($result) && $result->num_rows > 0) {
+            if (isset($posts) && count($posts) > 0) {
                 echo "<h2>All Posts </h2><br>";
-                while ($row = $result->fetch_assoc()) {
+                foreach ($posts as $post) {
                     echo "
                     <div class='post'>
                         <div class='post-header' style='display: flex; align-items: center; justify-content: space-between;'>
                             <!-- User Info -->
                             <div style='display: flex; align-items: center; gap: 10px;'>
-                                <img src='https://i.pravatar.cc/150?u=" . $row['user_id'] . "' 
-                                     alt='" . htmlspecialchars($row['name']) . "' 
+                                <img src='https://i.pravatar.cc/150?u=" . $post['user_id'] . "' 
+                                     alt='" . htmlspecialchars($post['name']) . "' 
                                      style='width: 40px; height: 40px; border-radius: 50%;'>
-                                <h4 style='margin: 0;'>" . htmlspecialchars($row['name']) . "</h4>
+                                <h4 style='margin: 0;'>" . htmlspecialchars($post['name']) . "</h4>
                             </div>
 
                             <!-- Actions -->
                             <div style='display: flex; gap: 15px;'>
-                                <a href='./pages/edit_page.php?post_id=" . $row['id'] . "' 
+                                <a href='./pages/edit_page.php?post_id=" . $post['id'] . "' 
                                    style='color: blue; text-decoration: none; font-weight: bold;'
                                    onclick=\"return confirm('Are you sure you want to edit this post?');\"
                                    >
                                    Edit
                                 </a>
-                                <a href='./db/delete_post.php?post_id=" . $row['id'] . "'   
+                                <a href='./db/delete_post.php?post_id=" . $post['id'] . "'   
                                    style='color: red; text-decoration: none; font-weight: bold;'  
                                    onclick=\"return confirm('Are you sure you want to delete this post?');\">
                                    Delete
@@ -83,13 +83,13 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
 
                         <div class='post-content'>
-                            <p>" . nl2br(htmlspecialchars($row['content'])) . "</p>";
+                            <p>" . nl2br(htmlspecialchars($post['content'])) . "</p>";
 
-                    if (!empty($row['media'])) {
-                        $ext = strtolower(pathinfo($row['media'], PATHINFO_EXTENSION));
+                    if (!empty($post['media'])) {
+                        $ext = strtolower(pathinfo($post['media'], PATHINFO_EXTENSION));
                         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
                             echo "<div style='text-align:center; margin:15px 0;'>
-                                    <img src='" . htmlspecialchars($row['media']) . "' 
+                                    <img src='" . htmlspecialchars($post['media']) . "' 
                                         style='width:100%; max-width:600px; height:400px; 
                            object-fit:cover; border-radius:12px; 
                            box-shadow:0 4px 12px rgba(0,0,0,0.2);'>
@@ -99,13 +99,13 @@ if (!isset($_SESSION['user_id'])) {
                                     <video controls style='width:100%; max-width:600px; max-height:800px; 
                               object-fit:cover; border-radius:12px; 
                               box-shadow:0 4px 12px rgba(0,0,0,0.2);'>
-                                        <source src='" . htmlspecialchars($row['media']) . "' type='video/$ext'>
+                                        <source src='" . htmlspecialchars($post['media']) . "' type='video/$ext'>
                                     </video>
                                   </div>";
                         }
                     }
 
-                    echo "      <small style='color:#555;'>Posted on: " . htmlspecialchars($row['created_at']) . "</small>
+                    echo "      <small style='color:#555;'>Posted on: " . htmlspecialchars($post['created_at']) . "</small>
                         </div>
                     </div>";
                 }

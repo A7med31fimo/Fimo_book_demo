@@ -1,22 +1,23 @@
 <?php
 include("../db/db_config.php");
 
-// التحقق من وصول الـ post_id
+
 if (!isset($_GET['post_id'])) {
     die("Post ID is required.");
 }
 
 $post_id = intval($_GET['post_id']);
 
-// جلب بيانات البوست
-$sql = "SELECT * FROM posts WHERE id = $post_id LIMIT 1";
-$result = $connection->query($sql);
+$sql = "SELECT * FROM posts WHERE id = ? LIMIT 1";
+$stmt = $connection->prepare($sql);
+$stmt->execute([$post_id]);
 
-if ($result->num_rows === 0) {
+if ($stmt->rowCount() === 0) {
     die("Post not found.");
 }
 
-$post = $result->fetch_assoc();
+// ✅ بدل fetch_assoc() بـ fetch(PDO::FETCH_ASSOC)
+$post = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -80,13 +81,12 @@ $post = $result->fetch_assoc();
     <div class="edit-container">
         <h2>✏️ Edit Post</h2>
         <form action="../db/update.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+            <input type="hidden" name="post_id" value="<?= htmlspecialchars($post['id']) ?>">
 
             <!-- Post Content -->
             <div class="mb-3">
                 <label for="content" class="form-label">Post Content</label>
-                <textarea name="content" id="content" class="form-control" rows="4"
-                    required><?= htmlspecialchars($post['content']) ?></textarea>
+                <textarea name="content" id="content" class="form-control" rows="4" required><?= htmlspecialchars($post['content']) ?></textarea>
             </div>
 
             <!-- Current Media -->
@@ -96,10 +96,11 @@ $post = $result->fetch_assoc();
                     <?php if (!empty($post['media'])): ?>
                         <?php
                         $ext = strtolower(pathinfo($post['media'], PATHINFO_EXTENSION));
+                        $mediaPath = htmlspecialchars($post['media']);
                         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
-                            echo "<img src='" .".". htmlspecialchars($post['media']) . "' alt='Post Image'>";
+                            echo "<img src='../$mediaPath' alt='Post Image'>";
                         } elseif (in_array($ext, ['mp4', 'webm'])) {
-                            echo "<video controls><source src='" . htmlspecialchars($post['media']) . "'></video>";
+                            echo "<video controls><source src='../$mediaPath' type='video/$ext'></video>";
                         }
                         ?>
                     <?php else: ?>

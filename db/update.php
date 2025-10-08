@@ -3,7 +3,7 @@ include("./db_config.php");
 
 if (isset($_POST['btn_update'])) {
     $post_id = intval($_POST['post_id']);
-    $content = mysqli_real_escape_string($connection, $_POST['content']);
+    $content =  htmlspecialchars($_POST['content']);
 
     // تحديث المحتوى
     $sql = "UPDATE posts SET content='$content' WHERE id=$post_id";
@@ -20,12 +20,14 @@ if (isset($_POST['btn_update'])) {
             exit();
         }
     }
-
-    if ($connection->query($sql) === TRUE) {
+    // var_dump($sql);
+    $stmt = $connection->prepare($sql);
+    $result = $stmt->execute();
+    if ($result) {
         header("Location: ../index.php?msg=Post updated successfully");
         exit();
     } else {
-        echo "Error updating post: " . $connection->error;
+        echo "Error updating post: " . $stmt->errorInfo();
     }
 }
 ?>

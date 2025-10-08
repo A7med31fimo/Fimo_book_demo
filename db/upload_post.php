@@ -1,10 +1,10 @@
 <?php
 
-include "db_config.php";
-
+require "db_config.php";
+session_start();
 if (isset($_POST['btn_upload'])) {
     $content = $_POST['content'];
-    $user_id = 1; // مؤقتاً هنجرب على user ثابت
+    $user_id = $_SESSION['user_id']; // مؤقتاً هنجرب على user ثابت
 
     $media = null;
     if (isset($_FILES['media']) && $_FILES['media']['error'] == 0) {
@@ -14,9 +14,10 @@ if (isset($_POST['btn_upload'])) {
         $media = "../uploads/" . $media_name;
     }
 
-    $sql = "INSERT INTO posts (user_id, content, media) VALUES ('$user_id', '$content', '$media')";
-    if ($connection->query($sql)) {
-        // echo "Post Added Successfully ✅";
+    $sql = "INSERT INTO posts (user_id, content, media) VALUES (?, ?, ?)";
+        $stmt = $connection->prepare($sql);
+        
+    if ($stmt->execute([$user_id, $content, $media])) {
         header("Location: ../index.php");
         exit();
     } else {

@@ -1,6 +1,6 @@
 <?php 
-include("../db/db_config.php");
-include("../db/register.php");
+
+require "../db/register.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -51,12 +51,11 @@ include("../db/register.php");
 
 <body>
 
-    <form method="POST" action="">
+    <form method="POST" action="<?= $_SERVER['PHP_SELF']?>">
         <h2 style="text-align:center;">Sign Up</h2>
         <input type="text" name="name" placeholder="Full Name" required>
         <input type="email" name="email" placeholder="Email Address" required>
         <input type="password" name="password" placeholder="Password" required>
-        <!-- هنا بنعرض الرسائل -->
         <?php if (!empty($message))
             echo $message; ?>
         <button type="submit" name="register">Register</button>
